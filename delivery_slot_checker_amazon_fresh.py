@@ -35,15 +35,17 @@ def main() -> None:
         if r == "OK":
             break
 
-    while True:
-        if check_delivery_slot(driver.page_source):
-            alert_delivery_slot()
-            break
-
+    while not check_delivery_slot(driver.page_source):
         print(f"No delivery slot. Retry in {REFRESH_INTERNAL} seconds.")
         time.sleep(REFRESH_INTERNAL)
         driver.refresh()
 
+    alert_delivery_slot()
+
+    while True:
+        r = input("Enter OK to continue: ")
+        if r == "OK":
+            break
 
 if __name__ == "__main__":
     main()
