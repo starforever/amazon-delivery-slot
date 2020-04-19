@@ -1,40 +1,49 @@
-import os
 import time
 
-import bs4
+from bs4 import BeautifulSoup
 from selenium import webdriver
 
+START_PAGE_URL = "https://www.amazon.com/"
+REFRESH_INTERNAL = 60
 
-def getWFSlot(productUrl):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
-    }
 
+def check_delivery_slot(page_source: str) -> bool:
+    soup = BeautifulSoup(page_source)
+    no_slot_elem = soup.find(
+        "div", string="No doorstep delivery windows are available for"
+    )
+    if no_slot_elem != None:
+        return False
+    return True
+
+
+def alert_delivery_slot() -> None:
+    alert_text = "Found delivery slot! Please proceed to checkout."
+    print(alert_text)
+
+
+def main() -> None:
     driver = webdriver.Chrome()
-    driver.get(productUrl)
-    html = driver.page_source
-    soup = bs4.BeautifulSoup(html)
-    time.sleep(60)
-    no_open_slots = True
+    driver.get(START_PAGE_URL)
 
-    while no_open_slots:
+    print(
+        "Login to your account. Add items to cart. Then proceed to the page to reserve a delivery slot."
+    )
+
+    while True:
+        r = input("Enter OK to continue: ")
+        if r == "OK":
+            break
+
+    while True:
+        if check_delivery_slot(driver.page_source):
+            alert_delivery_slot()
+            break
+
+        print(f"No delivery slot. Retry in {REFRESH_INTERNAL} seconds.")
+        time.sleep(REFRESH_INTERNAL)
         driver.refresh()
-        print("refreshed")
-        html = driver.page_source
-        soup = bs4.BeautifulSoup(html)
-        time.sleep(2)
-
-        try:
-            open_slots = soup.find("div", class_="orderSlotExists").text()
-            if open_slots != "false":
-                print("SLOTS OPEN!")
-                os.system('say "Slots for delivery opened!"')
-                no_open_slots = False
-                time.sleep(1400)
-        except AttributeError:
-            continue
 
 
-getWFSlot(
-    "https://www.amazon.com/gp/buy/shipoptionselect/handlers/display.html?hasWorkingJavascript=1"
-)
+if __name__ == "__main__":
+    main()
