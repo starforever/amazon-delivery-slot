@@ -34,7 +34,7 @@ def main() -> None:
     driver.get(START_PAGE_URL)
 
     print(
-        "Login to your account. Add items to cart. Then proceed to the page to reserve a delivery slot."
+        "Log in to your account. Add items to cart. Then proceed to the page to reserve a delivery slot."
     )
     confirm_and_continue("OK")
 
