@@ -9,12 +9,16 @@ REFRESH_INTERNAL = 60
 
 def check_delivery_slot(page_source: str) -> bool:
     soup = BeautifulSoup(page_source, "html5lib")
-    no_slot_elem = soup.find(
-        "div", string="No doorstep delivery windows are available for"
-    )
-    if no_slot_elem != None:
+
+    delivery_slots_elem = soup.find(id="slot-container-root")
+    if not delivery_slots_elem:
         return False
-    return True
+
+    for delivery_slot_elem in delivery_slots_elem.find_all(class_="Date-slot-container"):
+        if "No doorstep delivery windows are available for" not in delivery_slot_elem.text:
+            return True
+
+    return False
 
 
 def alert_delivery_slot() -> None:
