@@ -1,3 +1,4 @@
+import os
 import time
 
 from bs4 import BeautifulSoup
@@ -28,7 +29,13 @@ def check_delivery_slot(page_source: str) -> bool:
 
 def alert_delivery_slot() -> None:
     alert_text = "Found delivery slot! Please proceed to checkout."
+    alert_text_title = "Delivery Slot Found!"
+
     print(alert_text)
+
+    os.system(
+        f'osascript -e \'display notification "{alert_text}" with title "{alert_text_title}"\''
+    )
 
 
 def confirm_and_continue(confirm_text: str) -> None:

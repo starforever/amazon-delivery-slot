@@ -1,6 +1,9 @@
 from unittest import TestCase
 
-from delivery_slot_checker_amazon_fresh import check_delivery_slot
+from delivery_slot_checker_amazon_fresh import (
+    alert_delivery_slot,
+    check_delivery_slot,
+)
 
 
 class DeliverySlotCheckerAmazonFreshTest(TestCase):
@@ -10,3 +13,6 @@ class DeliverySlotCheckerAmazonFreshTest(TestCase):
         ) as page_source_file:
             page_source = page_source_file.read()
         self.assertFalse(check_delivery_slot(page_source))
+
+    def test_alert_delivery_slot(self):
+        alert_delivery_slot()
