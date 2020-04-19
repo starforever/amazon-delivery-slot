@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 
 from bs4 import BeautifulSoup
@@ -33,9 +34,10 @@ def alert_delivery_slot() -> None:
 
     print(alert_text)
 
-    os.system(
-        f'osascript -e \'display notification "{alert_text}" with title "{alert_text_title}"\''
-    )
+    if sys.platform == "darwin":
+        os.system(
+            f'osascript -e \'display notification "{alert_text}" with title "{alert_text_title}"\''
+        )
 
 
 def confirm_and_continue(confirm_text: str) -> None:
