@@ -14,8 +14,13 @@ def check_delivery_slot(page_source: str) -> bool:
     if not delivery_slots_elem:
         return False
 
-    for delivery_slot_elem in delivery_slots_elem.find_all(class_="Date-slot-container"):
-        if "No doorstep delivery windows are available for" not in delivery_slot_elem.text:
+    for delivery_slot_elem in delivery_slots_elem.find_all(
+        class_="Date-slot-container"
+    ):
+        if (
+            "No doorstep delivery windows are available for"
+            not in delivery_slot_elem.text
+        ):
             return True
 
     return False
