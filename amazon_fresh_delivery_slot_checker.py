@@ -1,10 +1,8 @@
-import bs4
-
-from selenium import webdriver
-
-import sys
-import time
 import os
+import time
+
+import bs4
+from selenium import webdriver
 
 
 def getWFSlot(productUrl):
