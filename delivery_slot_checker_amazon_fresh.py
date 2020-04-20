@@ -50,19 +50,24 @@ def confirm_and_continue(confirm_text: str) -> None:
 def main() -> None:
     driver = webdriver.Chrome()
     driver.get(START_PAGE_URL)
+    print("Log in to your account. Add items to cart.")
 
-    print(
-        "Log in to your account. Add items to cart. Then proceed to the page to reserve a delivery slot."
-    )
-    confirm_and_continue("OK")
+    while True:
+        print("Proceed to the page to reserve a delivery slot.")
+        confirm_and_continue("OK")
 
-    while not check_delivery_slot(driver.page_source):
-        print(f"No delivery slot. Retry in {REFRESH_INTERNAL} seconds.")
-        time.sleep(REFRESH_INTERNAL)
-        driver.refresh()
+        while not check_delivery_slot(driver.page_source):
+            print(f"No delivery slot. Retry in {REFRESH_INTERNAL} seconds.")
+            time.sleep(REFRESH_INTERNAL)
+            driver.refresh()
+        alert_delivery_slot()
 
-    alert_delivery_slot()
-    confirm_and_continue("OK")
+        r = input("Did you get the delivery slot (Y/N): ")
+        if r == "Y":
+            print("Great! Enjoy your delivery.")
+            break
+        else:
+            print("No worry. Let's find another one.")
 
 
 if __name__ == "__main__":
