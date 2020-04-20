@@ -1,3 +1,3 @@
 #!/usr/bin/env zsh
 
-find . -name "*.py" | xargs ./clean.sh
+find . -name "*.py" -type f | xargs ./clean.sh
